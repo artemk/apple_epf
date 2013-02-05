@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = "Downloader, Extractor and Parser for Apple Epf Affiliate files"
   s.description = "Downloader, Extractor and Parser for Apple Epf Affiliate files"
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
 
   s.add_development_dependency "rspec", "~> 2.12"
