@@ -17,6 +17,8 @@ module AppleEpf
         curl.http_auth_types = :basic
         curl.username = AppleEpf.apple_id
         curl.password = AppleEpf.apple_password
+        curl.follow_location = true
+        curl.max_redirects = 2
         curl.perform
         body = curl.body_str
         files =  Nokogiri::HTML(body).xpath("//td[2]/a").map(&:text).select{|s| s=~/.*tbz$/}.map{|f| f.chomp('.tbz')}
