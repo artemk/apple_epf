@@ -4,13 +4,6 @@
 
     gem 'apple_epf'
 
-## Download incremental
-
-    AppleEpf.get_incremental( 'current',
-                                      lambda { |header| puts header },
-                                      lambda { |row| puts row },
-                                      lambda { |success| puts 'Yeah!' if success } )
-
 ## Setup
 
   Put this in your initializer.rb if you are using Rails.
