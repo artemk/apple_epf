@@ -124,7 +124,9 @@ module AppleEpf
       request = Net::HTTP::Head.new(full_url)
       request.basic_auth(AppleEpf.apple_id, AppleEpf.apple_password)
 
-      response = Net::HTTP.new(uri.host, uri.port).start { |http| http.request(request) }
+      r = Net::HTTP.new(uri.host, uri.port)
+      r.use_ssl = true
+      response = r.start { |http| http.request(request) }
 
       raise AppleEpf::BadCredentialsError.new('Bad credentials') if response.code == "401"
 
