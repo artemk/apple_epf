@@ -96,7 +96,7 @@ module AppleEpf
     end
 
     def self.current_url
-      'http://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current'
+      'https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current'
     end
   end
 
@@ -108,7 +108,7 @@ module AppleEpf
     end
 
     def self.current_url
-      'http://feeds.itunes.apple.com/feeds/epf/v3/full/current'
+      'https://feeds.itunes.apple.com/feeds/epf/v3/full/current'
     end
   end
 

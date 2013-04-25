@@ -142,7 +142,7 @@ describe AppleEpf::Downloader do
       downloader.stub(:file_exists?){ file_exists }
       downloader.stub(:start_download)
       downloader.download
-      downloader.apple_filename_full.should eq("http://feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz")
+      downloader.apple_filename_full.should eq("https://feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz")
     end
 
     it "should properly set local file to store file in" do
@@ -153,7 +153,7 @@ describe AppleEpf::Downloader do
     end
 
     it "should download and save file" do
-      stub_request(:get, "http://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130123/popularity20130123.tbz").
+      stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130123/popularity20130123.tbz").
         to_return(:status => 200, :body => "Test\nWow", :headers => {})
 
       downloader = AppleEpf::Downloader.new('full', file, filedate)
@@ -185,10 +185,10 @@ describe AppleEpf::Downloader do
         downloader.unstub(:download_and_compare_md5_checksum)
       end
       it "should raise exception if md5 file does not match real md5 checksum of file" do
-        stub_request(:get, "http://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz").
+        stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz").
           to_return(:status => 200, :body => "Test\nWow", :headers => {})
 
-        stub_request(:get, "http://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz.md5").
+        stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz.md5").
           to_return(:status => 200, :body => "tupo", :headers => {})
 
         downloader.stub(:file_exists?){ file_exists }
@@ -200,10 +200,10 @@ describe AppleEpf::Downloader do
       end
 
       it "should not raise exception if md5 is ok" do
-        stub_request(:get, "http://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz").
+        stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz").
           to_return(:status => 200, :body => "Test\nWow", :headers => {})
 
-        stub_request(:get, "http://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz.md5").
+        stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz.md5").
           to_return(:status => 200, :body => "MD5 (popularity20130116.tbz) = 0371a79664856494e840af9e1e6c0152\n", :headers => {})
 
 

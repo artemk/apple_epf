@@ -156,7 +156,7 @@ describe AppleEpf::Main do
       let(:filename) { apple_epf_filename('current_full_list.html') }
 
       it "should return hash of avaliable files" do
-        stub_request(:get, "http://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/current").
+        stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/current").
           to_return(:status => 200, :body => File.read(filename), :headers => {})
 
         list = {
@@ -174,7 +174,7 @@ describe AppleEpf::Main do
       let(:filename) { apple_epf_filename('current_inc_list.html') }
 
       it "should return hash of avaliable files" do
-        stub_request(:get, "http://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current").
+        stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current").
           to_return(:status => 200, :body => File.read(filename), :headers => {})
 
         list = {"itunes"=>"20130205", "match"=>"20130205", "popularity"=>"20130205", "pricing"=>"20130205"}

@@ -6,7 +6,7 @@ require 'digest/md5'
 module AppleEpf
   class Downloader
     include AppleEpf::Logging
-    ITUNES_FLAT_FEED_URL = 'http://feeds.itunes.apple.com/feeds/epf/v3/full'.freeze
+    ITUNES_FLAT_FEED_URL = 'https://feeds.itunes.apple.com/feeds/epf/v3/full'.freeze
 
     attr_accessor :type, :filename, :filedate
 
