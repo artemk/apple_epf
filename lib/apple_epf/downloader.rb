@@ -77,7 +77,16 @@ module AppleEpf
 
       # Return false if no url was suggested or file does not exist
       raise AppleEpf::DownloaderError.new("Unable to find out what file do you want to download") if path.empty?
-      raise AppleEpf::FileNotExist.new("File does not exist #{path}") unless file_exists?(path)
+
+      unless file_exists?(path)
+        if @type == 'incremental'
+          #force prev week. Apple sometimes put files for Sunday to prev week, not current.
+          path = "#{main_dir_date(true)}/incremental/#{date_of_file}/#{@filename}#{date_of_file}.tbz"
+          raise AppleEpf::FileNotExist.new("File does not exist #{path}") unless file_exists?(path)
+        else
+          raise AppleEpf::FileNotExist.new("File does not exist #{path}")
+        end
+      end
 
       @apple_filename_full_path = path
       @apple_filename_full_path
@@ -98,10 +107,10 @@ module AppleEpf
       FileUtils.mkpath(dirpath)
     end
 
-    def main_dir_date
+    def main_dir_date(force_last = false)
       if @type == "incremental"
         # from Mon to Thurday dumps are in prev week folder
-        this_or_last = @filedate.wday <= 4 ? 'last' : 'this'
+        this_or_last = @filedate.wday <= 4 || force_last ? 'last' : 'this'
       elsif @type == "full"
         # full downloads usually are done only once. user can determine when it should be done
         this_or_last = 'this'

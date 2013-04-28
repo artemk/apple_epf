@@ -34,9 +34,8 @@ describe AppleEpf::Downloader do
       end
 
       context "and file does not exists" do
-        let(:file_exists) { false }
-
         it "should raise exception" do
+          downloader.stub(:file_exists?).and_return(false, false)
           downloader.filedate = Date.parse('17-01-2013')
           expect {
             downloader.get_filename_by_date_and_type
@@ -56,12 +55,18 @@ describe AppleEpf::Downloader do
           downloader.filedate = Date.parse('17-01-2013')
           downloader.get_filename_by_date_and_type.should == "20130109/incremental/20130117/popularity20130117.tbz"
         end
+
+
+        it "should return valid url if file exists but in prev catalog" do
+          downloader.stub(:file_exists?).and_return(false, true)
+          downloader.filedate = Date.parse('26-04-2013')
+          downloader.get_filename_by_date_and_type.should == "20130417/incremental/20130426/popularity20130426.tbz"
+        end
       end
 
       context "and file does not exists" do
-        let(:file_exists) { false }
-
         it "should raise exception" do
+          downloader.stub(:file_exists?).and_return(false, false)
           downloader.filedate = Date.parse('17-01-2013')
           expect {
             downloader.get_filename_by_date_and_type
