@@ -21,7 +21,7 @@ module AppleEpf
         curl.max_redirects = 5
         curl.perform
         body = curl.body_str
-        files =  Nokogiri::HTML(body).xpath("//td[2]/a").map(&:text).select{|s| s=~/.*tbz$/}.map{|f| f.chomp('.tbz')}
+        files =  Nokogiri::HTML(body).xpath("//td/a").map(&:text).select{|s| s=~/.*tbz$/}.map{|f| f.chomp('.tbz')}
         files.inject({}) do |all, e|
           e.match(/([a-z]*)(\d*)/)
           all[$1] = $2
