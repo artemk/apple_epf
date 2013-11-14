@@ -36,10 +36,12 @@
     file_entry.extracted_files #=> newly created(unpacked) files
 
     #Manually parse file
-    parser = AppleEpf::Parser.new(filename, header_block, row_block)
+    parser = AppleEpf::Parser.new(filename)
     # filename - full local path to file
-    # header_block - will return header info from file
-    # row_block - will return each row from file
+    
+    parser.process_rows do |r|
+      puts "row is #{r}"
+    end
 
 ## Download and Extract
   If you want to combine downloading and extracting your can use one of following
