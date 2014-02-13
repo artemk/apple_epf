@@ -160,10 +160,10 @@ describe AppleEpf::Main do
           to_return(:status => 200, :body => File.read(filename), :headers => {})
 
         list = {
-               "itunes" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"},
-       "match" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"},
-       "popularity" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"},
-       "pricing" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"}
+          "itunes" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/itunes20130130.tbz"},
+          "match" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/match20130130.tbz"},
+          "popularity" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/popularity20130130.tbz"},
+          "pricing" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/pricing20130130.tbz"}
         }
         AppleEpf::Full.get_current_list.should == list
       end
@@ -177,10 +177,11 @@ describe AppleEpf::Main do
         stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current").
           to_return(:status => 200, :body => File.read(filename), :headers => {})
 
-        list = {"itunes" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"},
-       "match" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"},
-       "popularity" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"},
-       "pricing" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"}
+        list = {
+          "itunes" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/itunes20130205.tbz"},
+          "match" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/match20130205.tbz"},
+          "popularity" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/popularity20130205.tbz"},
+          "pricing" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/pricing20130205.tbz"}
         }
         AppleEpf::Incremental.get_current_list.should == list
       end

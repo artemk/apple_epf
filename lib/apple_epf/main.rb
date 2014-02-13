@@ -28,7 +28,7 @@ module AppleEpf
           e.match(/([a-z]*)(\d*.tbz)/)
           all[$1] = {}
           all[$1][:base] = $2.chomp(".tbz")
-          all[$1][:full_url] = self.current_url + "/#{$2}"
+          all[$1][:full_url] = self.current_url + "/#{$1}#{$2}"
           all
         end
     end
