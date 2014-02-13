@@ -8,21 +8,26 @@ module AppleEpf
     include AppleEpf::Logging
     ITUNES_FLAT_FEED_URL = 'https://feeds.itunes.apple.com/feeds/epf/v3/full'.freeze
 
-    attr_accessor :type, :filename, :filedate
+    attr_accessor :type, :filename, :filedate, :force_url
 
     attr_reader :download_to, :apple_filename_full
     attr_writer :dirpath
-    def initialize(type, filename, filedate)
+    def initialize(type, filename, filedate, force_url = nil)
       @type = type
       @filename = filename #itunes, popularity, match, pricing
       @filedate = filedate
+      @force_url = force_url
     end
 
     def download
       _prepare_folders
-      get_filename_by_date_and_type
+      if @force_url
+        @apple_filename_full = @force_url
+      else
+        get_filename_by_date_and_type
+        @apple_filename_full = apple_filename_full_url(@apple_filename_full_path)
+      end
 
-      @apple_filename_full = apple_filename_full_url(@apple_filename_full_path)
       @download_to = File.join(dirpath, File.basename(@apple_filename_full))
 
       logger_info "Download file: #{@apple_filename_full}"

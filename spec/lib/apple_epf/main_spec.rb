@@ -160,10 +160,10 @@ describe AppleEpf::Main do
           to_return(:status => 200, :body => File.read(filename), :headers => {})
 
         list = {
-          'itunes' => '20130130',
-          'match' => '20130130',
-          'popularity' => '20130130',
-          'pricing' => '20130130'
+               "itunes" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"},
+       "match" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"},
+       "popularity" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"},
+       "pricing" => {:base=>"20130130", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/20130130.tbz"}
         }
         AppleEpf::Full.get_current_list.should == list
       end
@@ -177,7 +177,11 @@ describe AppleEpf::Main do
         stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current").
           to_return(:status => 200, :body => File.read(filename), :headers => {})
 
-        list = {"itunes"=>"20130205", "match"=>"20130205", "popularity"=>"20130205", "pricing"=>"20130205"}
+        list = {"itunes" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"},
+       "match" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"},
+       "popularity" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"},
+       "pricing" => {:base=>"20130205", :full_url=>"https://feeds.itunes.apple.com/feeds/epf/v3/full/current/incremental/current/20130205.tbz"}
+        }
         AppleEpf::Incremental.get_current_list.should == list
       end
     end
