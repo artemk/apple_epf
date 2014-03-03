@@ -19,7 +19,7 @@ module AppleEpf
       @force_url = force_url
     end
 
-    def download
+    def prepare
       _prepare_folders
       if @force_url
         @apple_filename_full = @force_url
@@ -27,15 +27,13 @@ module AppleEpf
         get_filename_by_date_and_type
         @apple_filename_full = apple_filename_full_url(@apple_filename_full_path)
       end
-
       @download_to = File.join(dirpath, File.basename(@apple_filename_full))
+    end
 
-      logger_info "Download file: #{@apple_filename_full}"
-      logger_info "Download to: #{@download_to}"
-
-      @download_retry = 0
-      start_download
-      download_and_compare_md5_checksum
+    def download
+      prepare
+      @download_processor = AppleEpf.download_processor.new(@apple_filename_full, @download_to)
+      @download_processor.download_and_check
       @download_to
     end
 
@@ -43,25 +41,6 @@ module AppleEpf
       File.join((@dirpath || AppleEpf.extract_dir), @type)
     end
 
-    #TODO combine with start_download
-    def download_and_compare_md5_checksum
-      begin
-        curl = Curl::Easy.new("#{@apple_filename_full}.md5")
-        curl.http_auth_types = :basic
-        curl.username = AppleEpf.apple_id
-        curl.password = AppleEpf.apple_password
-        curl.perform
-        @md5_checksum = curl.body_str.match(/.*=(.*)/)[1].strip
-      rescue NoMethodError
-        raise AppleEpf::Md5CompareError.new('Md5 of downloaded file is not the same as apple provide')
-      end
-
-      if Digest::MD5.file(@download_to).hexdigest != @md5_checksum
-        raise AppleEpf::Md5CompareError.new('Md5 of downloaded file is not the same as apple provide')
-      end
-
-      @md5_checksum
-    end
 
     def get_filename_by_date_and_type
       #today = DateTime.now
@@ -146,35 +125,5 @@ module AppleEpf
 
       response.code == "200"
     end
-
-    def start_download
-      begin
-        curl = Curl::Easy.new(@apple_filename_full)
-
-        # Authentication
-        curl.http_auth_types = :basic
-        curl.username = AppleEpf.apple_id
-        curl.password = AppleEpf.apple_password
-
-        File.open(@download_to, 'wb') do |f|
-          curl.on_body { |data|
-            f << data;
-            data.size
-          }
-          curl.perform
-        end
-      rescue Curl::Err::PartialFileError => ex
-        if @download_retry < AppleEpf.download_retry_count
-          @download_retry += 1
-
-          logger_info "Curl::Err::PartialFileError happened..."
-          logger_info "Restarting download"
-          start_download
-        else
-          raise AppleEpf::CurlError.new("Unable to download file.")
-        end
-      end
-    end
-
   end
 end

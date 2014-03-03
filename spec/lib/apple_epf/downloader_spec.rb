@@ -146,20 +146,23 @@ describe AppleEpf::Downloader do
     it "should properly set url for download" do
       downloader.stub(:file_exists?){ file_exists }
       downloader.stub(:start_download)
-      downloader.download
+      downloader.prepare
       downloader.apple_filename_full.should eq("https://feeds.itunes.apple.com/feeds/epf/v3/full/20130116/incremental/20130121/popularity20130121.tbz")
     end
 
     it "should properly set local file to store file in" do
       downloader.stub(:file_exists?){ file_exists }
       downloader.stub(:start_download)
-      downloader.download
+      downloader.prepare
       downloader.download_to.should eq("#{@tmp_dir}/incremental/popularity20130121.tbz")
     end
 
     it "should download and save file" do
       stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130123/popularity20130123.tbz").
         to_return(:status => 200, :body => "Test\nWow", :headers => {})
+
+      stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130123/popularity20130123.tbz.md5").
+        to_return(:status => 200, :body => "MD5 (popularity20130116.tbz) = 0371a79664856494e840af9e1e6c0152\n", :headers => {})
 
       downloader = AppleEpf::Downloader.new('full', file, filedate)
       downloader.stub(:download_and_compare_md5_checksum)
@@ -175,7 +178,8 @@ describe AppleEpf::Downloader do
     describe "dirpath" do
       before do
         downloader.stub(:file_exists?){ file_exists }
-        downloader.stub(:start_download)
+        #downloader.stub(:start_download)
+        AppleEpf.download_processor.any_instance.stub(:download_and_check)
       end
 
       it "should be able to change dir where to save files" do

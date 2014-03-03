@@ -6,6 +6,7 @@ require 'core_ext/module'
 require 'apple_epf/errors'
 require 'apple_epf/logging'
 require 'apple_epf/main'
+require 'apple_epf/download_processor'
 require 'apple_epf/downloader'
 require 'apple_epf/extractor'
 require 'apple_epf/parser'
@@ -21,6 +22,12 @@ module AppleEpf
 
   mattr_accessor :download_retry_count
   @@download_retry_count = 3
+
+  mattr_accessor :concurrent_downloads
+  @@concurrent_downloads = 2
+
+  mattr_accessor :download_processor
+  @@download_processor = AppleEpf::CurbDownloadProcessor
 
   mattr_accessor :keep_tbz_after_extract
   @@keep_tbz_after_extract = false
