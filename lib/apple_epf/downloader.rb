@@ -6,6 +6,8 @@ require 'digest/md5'
 module AppleEpf
   class Downloader
     include AppleEpf::Logging
+    include AppleEpf::Finder
+
     ITUNES_FLAT_FEED_URL = 'https://feeds.itunes.apple.com/feeds/epf/v3/full'.freeze
 
     attr_accessor :type, :filename, :filedate, :force_url
@@ -62,11 +64,13 @@ module AppleEpf
       # Return false if no url was suggested or file does not exist
       raise AppleEpf::DownloaderError.new("Unable to find out what file do you want to download") if path.empty?
 
-      unless file_exists?(path)
+      _full_url = apple_filename_full_url(path)
+      unless file_exists?(_full_url)
         if @type == 'incremental'
           #force prev week. Apple sometimes put files for Sunday to prev week, not current.
           path = "#{main_dir_date(true)}/incremental/#{date_of_file}/#{@filename}#{date_of_file}.tbz"
-          raise AppleEpf::FileNotExist.new("File does not exist #{path}") unless file_exists?(path)
+          _full_url = apple_filename_full_url(path)
+          raise AppleEpf::FileNotExist.new("File does not exist #{path}") unless file_exists?(_full_url)
         else
           raise AppleEpf::FileNotExist.new("File does not exist #{path}")
         end
@@ -102,28 +106,6 @@ module AppleEpf
 
       main_folder_date = Chronic.parse("#{this_or_last} week wednesday", :now => @filedate.to_time).to_date
       date_to_epf_format(main_folder_date)
-    end
-
-    def date_to_epf_format(date)
-      date.strftime("%Y%m%d")
-    end
-
-    def file_exists?(path_to_check)
-      full_url = apple_filename_full_url(path_to_check)
-      logger_info "Checking file at URL: #{full_url}"
-
-      uri = URI.parse(full_url)
-
-      request = Net::HTTP::Head.new(full_url)
-      request.basic_auth(AppleEpf.apple_id, AppleEpf.apple_password)
-
-      r = Net::HTTP.new(uri.host, uri.port)
-      r.use_ssl = true
-      response = r.start { |http| http.request(request) }
-
-      raise AppleEpf::BadCredentialsError.new('Bad credentials') if response.code == "401"
-
-      response.code == "200"
     end
   end
 end

@@ -2,3 +2,4 @@
 log/*.log
 pkg/
 local_testing
+.emacs.desktop
