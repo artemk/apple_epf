@@ -158,6 +158,7 @@ describe AppleEpf::Downloader do
     end
 
     it "should download and save file" do
+
       stub_request(:get, "https://test:test@feeds.itunes.apple.com/feeds/epf/v3/full/20130123/popularity20130123.tbz").
         to_return(:status => 200, :body => "Test\nWow", :headers => {})
 

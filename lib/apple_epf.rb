@@ -27,7 +27,7 @@ module AppleEpf
   @@concurrent_downloads = 2
 
   mattr_accessor :download_processor
-  @@download_processor = AppleEpf::CurbDownloadProcessor
+  @@download_processor = AppleEpf::NetHTTPDownloadProcessor
 
   mattr_accessor :keep_tbz_after_extract
   @@keep_tbz_after_extract = false

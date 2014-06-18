@@ -23,13 +23,23 @@ module AppleEpf
       end
     end
 
-    def process_rows(&block)
-      File.foreach( @filename, RECORD_SEPARATOR ) do |line|
-        unless line[0].chr == COMMENT_CHAR
-          line = line.chomp( RECORD_SEPARATOR )
-          block.call( line.split( FIELD_SEPARATOR, -1) ) if block_given?
+    def process_rows(opts = {}, &block)
+      count = 0
+      pos = 0
+      opts = { limit: nil, pos: 0}.merge(opts)
+      File.open(@filename) do |file|
+        file.pos = opts[:pos]
+        file.each_line(RECORD_SEPARATOR) do |line|
+          unless line[0].chr == COMMENT_CHAR
+            line = line.chomp( RECORD_SEPARATOR )
+            block.call( line.split( FIELD_SEPARATOR, -1) ) if block_given?
+            pos = file.pos
+            count +=1 if opts[:limit]
+            return pos, false if count == opts[:limit]
+          end
         end
       end
+      return pos, true
     end
 
     private

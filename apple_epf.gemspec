@@ -16,15 +16,16 @@ Gem::Specification.new do |s|
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
 
   s.add_development_dependency "rspec", "~> 2.12"
-  s.add_development_dependency "rails", "~> 3.2.3"
   s.add_development_dependency 'guard'
   s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'rb-fsevent', '~> 0.9.1'
   s.add_development_dependency 'webmock'
   s.add_development_dependency 'timecop'
-  s.add_development_dependency 'thin'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rack'
 
-  s.add_dependency "curb"
+
+
   s.add_dependency 'chronic', '~> 0.9.0'
   s.add_dependency "nokogiri", ">= 1.5.6"
 

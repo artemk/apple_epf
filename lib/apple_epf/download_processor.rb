@@ -1,3 +1,5 @@
+require "net/http"
+require "uri"
 module AppleEpf
   class DownloadProcessor
 
@@ -12,12 +14,13 @@ module AppleEpf
 
     def get_file_md5
       begin
-        curl = Curl::Easy.new("#{@apple_filename_full}.md5")
-        curl.http_auth_types = :basic
-        curl.username = AppleEpf.apple_id
-        curl.password = AppleEpf.apple_password
-        curl.perform
-        @md5_checksum = curl.body_str.match(/.*=(.*)/)[1].strip
+        uri = URI.parse("#{@apple_filename_full}.md5")
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true if uri.scheme == 'https'
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request.basic_auth(AppleEpf.apple_id, AppleEpf.apple_password)
+        response = http.request(request)
+        @md5_checksum = response.body.match(/.*=(.*)/)[1].strip
       rescue NoMethodError
         raise AppleEpf::Md5CompareError.new('Md5 of downloaded file is not the same as apple provide')
       end
@@ -25,5 +28,6 @@ module AppleEpf
   end
 end
 
-require "apple_epf/download_processor/curb_download_processor"
+require "apple_epf/download_processor/net_http_download_processor"
+#require "apple_epf/download_processor/curb_download_processor"
 require "apple_epf/download_processor/aria_download_processor"

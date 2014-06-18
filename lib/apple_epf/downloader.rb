@@ -1,6 +1,6 @@
 require 'net/http'
 require 'date'
-require 'curb'
+#require 'curb'
 require 'digest/md5'
 
 module AppleEpf

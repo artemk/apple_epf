@@ -13,14 +13,13 @@ module AppleEpf
     end
 
     def self.get_current_list
-        curl = Curl::Easy.new(self.current_url)
-        curl.http_auth_types = :basic
-        curl.username = AppleEpf.apple_id
-        curl.password = AppleEpf.apple_password
-        curl.follow_location = true
-        curl.max_redirects = 5
-        curl.perform
-        body = curl.body_str
+        uri = URI.parse(self.current_url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true if uri.scheme == 'https'
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request.basic_auth(AppleEpf.apple_id, AppleEpf.apple_password)
+        response = http.request(request)
+        body = response.body
 
         files =  Nokogiri::HTML(body).xpath("//td/a").map(&:text).select{|s| s=~/.*tbz$/}
 

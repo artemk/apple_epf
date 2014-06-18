@@ -19,9 +19,13 @@ module AppleEpf
       @files_to_extract.each do |f|
         @extracted_files.push File.basename(@filename, '.tbz') + '/' + f
       end
-
-      result = system "cd #{@dirname} && tar -xjf #{@basename} --wildcards --no-anchored #{@extracted_files.join(' ')}"
-
+      
+      bsdtar = `tar --version`.include?('bsdtar')
+      if bsdtar
+        result = system "cd #{@dirname} && tar -xjf #{@basename} #{@extracted_files.join(' ')}"
+      else
+        result = system "cd #{@dirname} && tar -xjf #{@basename} --wildcards --no-anchored #{@extracted_files.join(' ')}"
+      end
       if result
         _extracted_files = @extracted_files.map{|f| File.join(@dirname, f)}
         @file_entry = FileEntry.new(@filename, Hash[@files_to_extract.zip(_extracted_files)])
