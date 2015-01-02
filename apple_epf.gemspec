@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "curb"
   s.add_dependency 'chronic', '~> 0.9.0'
-  s.add_dependency "nokogiri", "~> 1.5.6"
+  s.add_dependency "nokogiri", "1.6.5"
 end
