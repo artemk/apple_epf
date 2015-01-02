@@ -20,7 +20,7 @@ module AppleEpf
         @extracted_files.push File.basename(@filename, '.tbz') + '/' + f
       end
 
-      result = system "cd #{@dirname} && tar -xjf #{@basename} #{@extracted_files.join(' ')}"
+      result = system "cd #{@dirname} && tar -xf #{@basename} #{@extracted_files.join(' ')} --use-compress-program lbzip2"
 
       if result
         _extracted_files = @extracted_files.map{|f| File.join(@dirname, f)}
