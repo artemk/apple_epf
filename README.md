@@ -1,8 +1,9 @@
 # AppleEpf
 
 ## Installation
-
-    gem 'apple_epf'
+```ruby
+  gem 'apple_epf'
+```
 
 ## Setup
 
@@ -115,3 +116,7 @@ AppleEpf::Full.get_current_list #=> current full files
   you have `aria2c` in your `PATH`.
 
   And of cource you write your own processor.
+
+## Make sure to try lbzip2
+  lbzip2 uncompress files in parallel. Thanks [@funkyboy](https://github.com/funkyboy) for his help.
+  Just set `config.use_lbzip2 = true` and make sure you have it in `PATH`. On mac you can use `brew install lbzip2` for it.

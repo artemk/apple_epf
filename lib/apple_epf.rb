@@ -46,6 +46,9 @@ module AppleEpf
   mattr_accessor :files_matrix
   @@files_matrix = {popularity: ['application_popularity_per_genre']}.freeze
 
+  mattr_accessor :use_lbzip2
+  @@use_lbzip2 = false
+
   def self.configure
     yield self
   end
