@@ -21,7 +21,7 @@ module AppleEpf
       end
 
       result = if AppleEpf.use_lbzip2
-        system "cd #{@dirname} && tar -xj #{@basename} #{@extracted_files.join(' ')} --use-compress-program lbzip2"
+        system "cd #{@dirname} && tar -xf #{@basename} #{@extracted_files.join(' ')} --use-compress-program lbzip2"
       else
         system "cd #{@dirname} && tar -xjf #{@basename} #{@extracted_files.join(' ')} "
       end
