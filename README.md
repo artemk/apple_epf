@@ -20,6 +20,8 @@ AppleEpf.configure do |config|
   config.download_processor = AppleEpf::AriaDownloadProcessor
   config.concurrent_downloads = 16
   config.log_file = "#{Rails.root}/log/apple_epf_#{Rails.env}.log"
+  #config.archiver = :gnutar
+  #config.archiver_path = "/usr/local/bin/tar"
 end
 ```
 

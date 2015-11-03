@@ -45,6 +45,11 @@ module AppleEpf
 
   mattr_accessor :files_matrix
   @@files_matrix = {popularity: ['application_popularity_per_genre']}.freeze
+  mattr_accessor :archiver
+  @@archiver = :gnutar
+
+  mattr_accessor :archiver_path
+  @@archiver_path = "/usr/bin/tar"
 
   mattr_accessor :use_lbzip2
   @@use_lbzip2 = false
