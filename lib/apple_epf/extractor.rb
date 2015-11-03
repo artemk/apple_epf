@@ -20,11 +20,9 @@ module AppleEpf
         @extracted_files.push File.basename(@filename, '.tbz') + '/' + f
       end
 
-      result = if AppleEpf.use_lbzip2
-        system "cd #{@dirname} && tar -xj #{@basename} #{@extracted_files.join(' ')} --use-compress-program lbzip2"
-      else
-        system "cd #{@dirname} && tar -xjf #{@basename} #{@extracted_files.join(' ')} "
-      end
+      extract = extract_command(@basename, @extracted_files.join(' '))
+
+      result = system "cd #{@dirname} && #{extract}"
 
       if result
         _extracted_files = @extracted_files.map{|f| File.join(@dirname, f)}
@@ -38,10 +36,32 @@ module AppleEpf
     end
 
     private
+
+    def extract_command(filename, files_to_extract)
+      opts = archiver_opts
+      "#{archiver_path} #{opts} #{filename} #{files_to_extract}"
+    end
+
+    def archiver_path
+      AppleEpf.archiver_path
+    end
+
+    def archiver_opts
+      if AppleEpf.use_lbzip2
+        format_opt = "--use-compress-program=lbzip2"
+      else
+        format_opt = "-j"
+      end
+
+      if AppleEpf.archiver == :gnutar
+        "-x #{format_opt} -f"
+      elsif AppleEpf.archiver == :bsdtar
+        "-x #{format_opt}"
+      end
+    end
+
     def keep_tbz_after_extract?
       !!keep_tbz_after_extract || AppleEpf.keep_tbz_after_extract
     end
   end
-
-
 end
